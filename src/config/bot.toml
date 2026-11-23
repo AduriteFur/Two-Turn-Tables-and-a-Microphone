@@ -10,7 +10,7 @@ codename = "Homer Simpson"
 [CONF]
 
 [CONF.bot]
-prefix = ""
+prefixes = "tttam!, tam!, tm!"
 
 [CONF.daniel]
 enabled = false
