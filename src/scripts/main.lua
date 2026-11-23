@@ -1,12 +1,20 @@
+--// NAME: main.lua
+--// DESC: a script that runs the bot
+--// AUTHOR: AduriteFur
+
 _G.tam = {}
 local tam = _G.tam
 
 -- this looks ugly as balls
 package.path = package.path .. ";./deps/share/lua/5.5/?.lua;./deps/share/lua/5.5/?/init.lua"
 
+-- deps
 local discordia = require('discordia')
 local tinytoml = require("tinytoml")
 local pretty = require("pretty-print")
+local rsComms = require('src.scripts.process.registerCommands')
+
+-- variables
 tam.client = discordia.Client()
 tam.config = tinytoml.parse("src/config/bot.toml")
 local tokens = tinytoml.parse("src/config/tokens.toml")
@@ -20,6 +28,7 @@ print("Starting up [" ..
 tam.client:on('ready', function()
     -- client.user is the path for your bot
     print('Logged in as ' .. tam.client.user.username)
+    rsComms.init()
 end)
 
 print("Attempting to log in")
