@@ -42,6 +42,10 @@ luac.out
 # Sensitive Stuff
 src/config/tokens.toml
 
+# folders
+.vscodium
+.vscode
+
 # Luvit and deps
 lit
 luvit
