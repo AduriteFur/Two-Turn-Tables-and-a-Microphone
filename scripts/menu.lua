@@ -127,6 +127,21 @@ local function commandSuccess(ok, _, code)
     return ok == true or ok == 0 or code == 0
 end
 
+local function runPackageCommand(command)
+    local process = io.popen("id -u 2>/dev/null")
+    local uid = process and process:read("*l")
+
+    if process then
+        process:close()
+    end
+
+    if uid == "0" then
+        command = command:gsub("^sudo%s+", "")
+    end
+
+    return os.execute(command)
+end
+
 local function shellQuote(value)
     return "'" .. tostring(value):gsub("'", "'\\''") .. "'"
 end
@@ -191,7 +206,7 @@ local function installSystemPackages(manager, packages)
     end
 
     local command = manager.install .. " " .. table.concat(packages, " ")
-    local ok = os.execute(command)
+    local ok = runPackageCommand(command)
 
     return commandSuccess(ok)
 end
@@ -224,7 +239,7 @@ end
 local function installDocker(manager)
     print("[Docker] Installing " .. manager.docker .. "...")
 
-    local ok = os.execute(manager.install .. " " .. manager.docker)
+    local ok = runPackageCommand(manager.install .. " " .. manager.docker)
 
     if commandSuccess(ok) then
         print("[Docker] Installation completed.")
@@ -280,6 +295,8 @@ local function installLuaRocks(manager, projectRoot, packages)
     return true
 end
 
+local installSucceeded = false
+
 local actions = {
     [1] = {
         name = "Start Bot",
@@ -303,6 +320,7 @@ local actions = {
         name = "Install",
         run = function()
             print("\nStarting Install")
+            installSucceeded = false
 
             local source = debug.getinfo(1, "S").source
             local scriptPath = source:sub(1, 1) == "@" and source:sub(2) or source
@@ -423,25 +441,30 @@ local actions = {
                 return
             end
 
-            print("[3/4] Checking Docker")
-            print("But first lemme get details of your machine")
+            if os.getenv("TTTAM_CONTAINER") == "1" then
+                print("[3/4] Skipping Docker installation inside container.")
+            else
+                print("[3/4] Checking Docker")
+                print("But first lemme get details of your machine")
 
-            local dockerStatus = checkDocker(manager)
+                local dockerStatus = checkDocker(manager)
 
-            if dockerStatus == true then
-                print("[Docker] Docker is already installed.")
-            elseif dockerStatus == false then
-                print("[Docker] Docker is available. Installing...")
+                if dockerStatus == true then
+                    print("[Docker] Docker is already installed.")
+                elseif dockerStatus == false then
+                    print("[Docker] Docker is available. Installing...")
 
-                if not installDocker(manager) then
+                    if not installDocker(manager) then
+                        return
+                    end
+                else
+                    print("[Docker] Docker is unavailable.")
                     return
                 end
-            else
-                print("[Docker] Docker is unavailable.")
-                return
             end
 
             print("[4/4] Installation complete.")
+            installSucceeded = true
         end
     },
     [5] = {
@@ -522,4 +545,12 @@ local function Main()
     end
 end
 
-Main()
+if arg and arg[1] == "--install" then
+    actions[4].run()
+
+    if not installSucceeded then
+        os.exit(1)
+    end
+else
+    Main()
+end
