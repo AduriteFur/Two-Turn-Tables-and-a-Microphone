@@ -30,8 +30,24 @@ local actions = {
     [4] = {
         name = "Install",
         run = function()
-            print("\nPlease elevate to super user if the sudo message is displayed")
-            os.execute("sudo true") -- dummy line to elevate user
+            print("\nStarting Install")
+
+            local scriptPath = debug.getinfo(1, "S").source:sub(2)
+            local cwd = os.getenv("PWD") or "."
+
+            if scriptPath:sub(1, 1) ~= "/" then
+                scriptPath = cwd .. "/" .. scriptPath
+            end
+
+            local scriptDir = scriptPath:match("(.*/)")
+            local projectRoot = scriptDir:gsub("/scripts/$", "")
+
+            print(projectRoot)
+
+            print("[0/???] cd'ing to project")
+            os.execute(string.format([[
+                cd %s && curl -L https://github.com/luvit/lit/raw/master/get-lit.sh | sh
+            ]], projectRoot))
         end
     },
     [5] = {
