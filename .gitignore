@@ -50,4 +50,4 @@ src/config/tokens.toml
 lit
 luvit
 luvi
-# will remove when i do full installs deps/
+deps/
