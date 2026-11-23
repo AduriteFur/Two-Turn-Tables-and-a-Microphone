@@ -1,0 +1,8 @@
+[bot]
+name="Two Turn Tables and a Microphone"
+
+[bot.META]
+major = 0
+minor = 1
+hotfix = 0
+codename = "Homer Simpson"
