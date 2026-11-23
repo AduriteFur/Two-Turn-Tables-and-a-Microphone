@@ -10,6 +10,7 @@ codename = "Homer Simpson"
 [CONF.debug]
 logging = true
 extrainfo = false
+debugcommands = true
 
 [CONF.bot]
 prefixes = ["tttam!", "tam!", "tm!"]
