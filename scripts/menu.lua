@@ -252,6 +252,7 @@ local function installDocker(manager)
     return false
 end
 
+
 local function installLuaRocks(manager, projectRoot, packages)
     print("[LuaRocks] Checking installation...")
 
@@ -276,13 +277,25 @@ local function installLuaRocks(manager, projectRoot, packages)
         return false
     end
 
+    local depsDir = projectRoot .. "/deps"
+
+    local mkdirStatus = os.execute("mkdir -p " .. shellQuote(depsDir))
+
+    if not commandSuccess(mkdirStatus) then
+        print("[LuaRocks] Failed to create deps directory.")
+        return false
+    end
+
     for _, package in ipairs(packages) do
-        print("[LuaRocks] Installing " .. package .. "...")
+        print("[LuaRocks] Installing " .. package .. " into deps...")
 
         local luaVersion = manager.luaVersion and ("--lua-version=" .. manager.luaVersion .. " ") or ""
+
         local command = string.format(
-            "cd %s && luarocks " .. luaVersion .. "--local install %s",
+            "cd %s && luarocks %s--tree=%s install %s",
             shellQuote(projectRoot),
+            luaVersion,
+            shellQuote(depsDir),
             shellQuote(package)
         )
 
@@ -294,9 +307,10 @@ local function installLuaRocks(manager, projectRoot, packages)
         end
     end
 
-    print("[LuaRocks] All packages installed.")
+    print("[LuaRocks] All packages installed into " .. depsDir)
     return true
 end
+
 
 local installSucceeded = false
 
