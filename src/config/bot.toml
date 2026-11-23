@@ -24,3 +24,6 @@ enabled = false
 max_pending = 20
 max_per_users = 5
 debounce_seconds = 120
+
+[CONF.oil]
+path = "src/assets/oil"

@@ -51,3 +51,6 @@ lit
 luvit
 luvi
 deps/
+
+# more folders (fuck you, youre not getting the oil channel stuff)
+src/assets/oil
