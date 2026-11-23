@@ -69,7 +69,9 @@ local pkgManagers = {
         command = "apk",
         install = "sudo apk add",
         luarocks = "luarocks",
-        buildDeps = { "sqlite-dev", "build-base" },
+        buildDeps = { "sqlite-dev", "build-base", "lua5.1-dev" },
+        runtimeDeps = { "ffmpeg", "yt-dlp" },
+        luaVersion = "5.1",
         docker = "docker",
         search = "apk search -x docker"
     },
@@ -277,8 +279,9 @@ local function installLuaRocks(manager, projectRoot, packages)
     for _, package in ipairs(packages) do
         print("[LuaRocks] Installing " .. package .. "...")
 
+        local luaVersion = manager.luaVersion and ("--lua-version=" .. manager.luaVersion .. " ") or ""
         local command = string.format(
-            "cd %s && luarocks --local install %s",
+            "cd %s && luarocks " .. luaVersion .. "--local install %s",
             shellQuote(projectRoot),
             shellQuote(package)
         )
@@ -361,6 +364,14 @@ local actions = {
             if not commandExists("curl") then
                 print("[Install] curl is required but was not found.")
                 return
+            end
+
+            if manager.runtimeDeps then
+                print("[System] Installing runtime dependencies...")
+                if not installSystemPackages(manager, manager.runtimeDeps) then
+                    print("[System] Failed to install runtime dependencies.")
+                    return
+                end
             end
 
             print("[0/4] Installing Lit")
