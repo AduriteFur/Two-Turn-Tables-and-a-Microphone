@@ -9,4 +9,5 @@ This bot is written in lua uses discordia and other addons
 
 ## Install
 run the menu.lua in the folder scripts in the project root
-specifically do lua scripts/menu.lua
+do not run it with luvit its not working on luvit
+most importantly press 4 when in the menu  to install all the stuff needed like deps luvit and etc
