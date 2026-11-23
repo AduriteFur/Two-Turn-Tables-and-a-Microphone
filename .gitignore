@@ -41,3 +41,9 @@ luac.out
 
 # Sensitive Stuff
 src/config/tokens.toml
+
+# Luvit and deps
+lit
+luvit
+luvi
+deps/
