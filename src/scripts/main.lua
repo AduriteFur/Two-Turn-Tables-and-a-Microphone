@@ -11,8 +11,16 @@ tam.client = discordia.Client()
 tam.config = tinytoml.parse("src/config/bot.toml")
 local tokens = tinytoml.parse("src/config/tokens.toml")
 
-print("Starting up as " ..
+print("Starting up [" ..
     tam.config.bot.name ..
     " v" ..
     tam.config.bot.META.major ..
-    "." .. tam.config.bot.META.minor .. "." .. tam.config.bot.META.hotfix .. " " .. tam.config.bot.META.codename)
+    "." .. tam.config.bot.META.minor .. "." .. tam.config.bot.META.hotfix .. " " .. tam.config.bot.META.codename .. "]")
+
+tam.client:on('ready', function()
+    -- client.user is the path for your bot
+    print('Logged in as ' .. tam.client.user.username)
+end)
+
+print("Attempting to log in")
+tam.client:run("Bot " .. tokens.bot.token)
