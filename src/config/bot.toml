@@ -6,3 +6,16 @@ major = 0
 minor = 1
 hotfix = 0
 codename = "Homer Simpson"
+
+[CONF]
+
+[CONF.bot]
+prefix = ""
+
+[CONF.daniel]
+enabled = false
+
+[CONF.daniel.queue]
+max_pending = 20
+max_per_users = 5
+debounce_seconds = 120
