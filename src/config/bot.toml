@@ -6,6 +6,7 @@ major = 0
 minor = 5
 hotfix = 3
 codename = "Homer Simpson"
+link = "https://github.com/AduriteFur/Two-Turn-Tables-and-a-Microphone"
 
 [CONF.debug]
 logging = true

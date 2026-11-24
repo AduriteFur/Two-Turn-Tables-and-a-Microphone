@@ -138,6 +138,7 @@ function rsComms.init()
             slashCommand
         )
 
+        -- ill remove these soon
         print("pcall:", success)
         print("result:", tostring(result))
         print("error:", tostring(err))
