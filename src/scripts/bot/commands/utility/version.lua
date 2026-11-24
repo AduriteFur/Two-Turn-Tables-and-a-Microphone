@@ -4,7 +4,7 @@ local command = {
     Desc = "shows the version",
     Permission = 0, -- for members
     Enabled = true,
-    CommType = "dbg",
+    --CommType = "dbg",
     CommSide = "slash",
 
     args = {} -- contains arguments

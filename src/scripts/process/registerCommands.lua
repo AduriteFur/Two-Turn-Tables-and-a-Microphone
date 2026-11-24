@@ -17,6 +17,7 @@ tam.Comms = {
 local fs = require("fs")
 local path = require("path")
 local pretty = require("pretty-print")
+local timer = require("timer")
 
 -- functs
 local function scanDir(dir, files)
@@ -76,7 +77,18 @@ end
 
 -- module functs
 function rsComms.init()
+    local existing = tam.client:getGlobalApplicationCommands()
     setupTables()
+
+    for id, command in pairs(existing) do
+        local name = command[3]:lower()
+
+        if not tam.Comms.succeeds[name] then
+            tam.client:deleteGlobalApplicationCommand(id)
+            print("Cleaned up " .. name)
+        end
+    end
+
     for name, modulePath in pairs(tam.Comms.succeeds) do
         local module = require(modulePath)
 
@@ -86,7 +98,6 @@ function rsComms.init()
         )
 
         tam.client:createGlobalApplicationCommand(slashCommand)
-
         tam.Comms.registered[name] = true
     end
 
