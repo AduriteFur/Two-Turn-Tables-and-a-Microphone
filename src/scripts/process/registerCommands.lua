@@ -101,7 +101,17 @@ function rsComms.init()
             module.Desc
         )
 
-        for argName, arg in pairs(module.args or {}) do
+        local sortedArgs = {}
+
+        for _, arg in pairs(module.args or {}) do
+            sortedArgs[#sortedArgs + 1] = arg
+        end
+
+        table.sort(sortedArgs, function(a, b)
+            return a.Required == true and b.Required ~= true
+        end)
+
+        for _, arg in ipairs(sortedArgs) do
             local option = tam.slash.option()
                 :setName(arg.Name)
                 :setDescription(arg.Desc or arg.Display)
@@ -122,11 +132,15 @@ function rsComms.init()
             slashCommand = slashCommand:addOption(option)
         end
 
-        local success, result = pcall(
+        local success, result, err = pcall(
             tam.client.createGlobalApplicationCommand,
             tam.client,
             slashCommand
         )
+
+        print("pcall:", success)
+        print("result:", tostring(result))
+        print("error:", tostring(err))
 
         if success and result then
             tam.Comms.registered[name] = true

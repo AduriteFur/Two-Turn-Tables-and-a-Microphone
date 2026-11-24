@@ -22,12 +22,16 @@ local command = {
             Type = _G.tam.Enums.ArgumentType.INTEGER,
             Required = false,
             MinValue = 16,
-            MaxValue = 4096
+            MaxValue = 256
         }
     }
 }
 
-function command.init(interaction)
+function command.init(interaction, l, args)
+    local member = args.member
+    local size = args.size or 256
+
+    interaction:reply(member:getAvatarURL(size), true)
 end
 
 return command
