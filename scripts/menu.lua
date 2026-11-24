@@ -434,6 +434,7 @@ local actions = {
                 "creationix/los",
                 "luvit/pathjoin",
                 "luvit/pretty-print",
+                "luvit/fs",
                 "creationix/resource",
                 "creationix/websocket-codec"
             }

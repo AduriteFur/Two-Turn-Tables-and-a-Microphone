@@ -1,21 +1,26 @@
 --// NAME: main.lua
 --// DESC: a script that runs the bot
 --// AUTHOR: AduriteFur
+--// Note: i fucking hate require and i hope i neer have to deal with the thing being so fucking picky
 
 _G.tam = {}
 local tam = _G.tam
 
--- this looks ugly as balls
-package.path = package.path .. ";./deps/share/lua/5.5/?.lua;./deps/share/lua/5.5/?/init.lua"
+-- shitass fix idk
+getfenv(0).require = require
+package.path = package.path
+    .. ";./deps/share/lua/5.5/?.lua"
+    .. ";./deps/share/lua/5.5/?/init.lua"
 
--- deps
-local discordia = require('discordia')
+-- modules
+local discordia = require("discordia")
 local tinytoml = require("tinytoml")
 local pretty = require("pretty-print")
-local rsComms = require('src.scripts.process.registerCommands')
+local rsComms = require("./process/registerCommands")
+tam.slash = require("discordia-slash").util.tools()
 
 -- variables
-tam.client = discordia.Client()
+tam.client = discordia.Client():useApplicationCommands()
 tam.config = tinytoml.parse("src/config/bot.toml")
 local tokens = tinytoml.parse("src/config/tokens.toml")
 
@@ -26,7 +31,6 @@ print("Starting up [" ..
     "." .. tam.config.bot.META.minor .. "." .. tam.config.bot.META.hotfix .. " " .. tam.config.bot.META.codename .. "]")
 
 tam.client:on('ready', function()
-    -- client.user is the path for your bot
     print('Logged in as ' .. tam.client.user.username)
     rsComms.init()
 end)
