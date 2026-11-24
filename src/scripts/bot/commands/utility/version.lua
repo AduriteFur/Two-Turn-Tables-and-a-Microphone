@@ -18,7 +18,7 @@ function command.init(interaction)
         tam.config.bot.META.minor ..
         "." ..
         tam.config.bot.META.hotfix ..
-        " " .. tam.config.bot.META.codename .. "\ncheck out the bot on github" .. tam.config.bot.META.link)
+        " " .. tam.config.bot.META.codename .. "\ncheck out the bot on github at: " .. tam.config.bot.META.link)
 end
 
 return command
