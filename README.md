@@ -7,6 +7,7 @@ This bot was made for a friend group of mine which makes this bot a joke bot
 If you wanna set this up be my guest cuz idk
 This bot is written in lua uses discordia and other addons
 This bot cannot be visualized well so im just not gonna add images
+This bot is written in lua cuz i fucking hate ts js and py
 
 ## INSTALL
 Run the menu.lua in the folder scripts in the project root
