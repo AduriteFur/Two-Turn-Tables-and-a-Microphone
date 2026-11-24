@@ -17,6 +17,7 @@ local discordia = require("discordia")
 local tinytoml = require("tinytoml")
 local pretty = require("pretty-print")
 local rsComms = require("./process/registerCommands")
+local globalAssign = require("./utils/templates/globalAssign")
 tam.slash = require("discordia-slash").util.tools()
 
 -- variables

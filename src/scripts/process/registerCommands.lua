@@ -51,13 +51,17 @@ local function setupTables()
 
         local success, required = pcall(require, modulePath)
         print("loaded:", modulePath)
-        print("returned:", type(required))
+        print("success:", success)
+        print("return type:", type(required))
+        print("return output:", tostring(required))
+        print("cache value:", tostring(package.loaded[modulePath]))
 
         if type(required) == "table" then
             pretty.prettyPrint(required)
         end
 
-        if success then
+        if success and type(required) == "table" then
+            assert(type(required.Name) == "string", "Command is missing a valid Name: " .. modulePath)
             local name = required.Name:lower()
 
             if required.CommType == "dbg"
@@ -81,7 +85,7 @@ function rsComms.init()
     setupTables()
 
     for id, command in pairs(existing) do
-        local name = command[3]:lower()
+        local name = command.name:lower()
 
         if not tam.Comms.succeeds[name] then
             tam.client:deleteGlobalApplicationCommand(id)
@@ -97,8 +101,42 @@ function rsComms.init()
             module.Desc
         )
 
-        tam.client:createGlobalApplicationCommand(slashCommand)
-        tam.Comms.registered[name] = true
+        for argName, arg in pairs(module.args or {}) do
+            local option = tam.slash.option()
+                :setName(arg.Name)
+                :setDescription(arg.Desc or arg.Display)
+                :setType(arg.Type)
+
+            if arg.Required ~= nil then
+                option:setRequired(arg.Required)
+            end
+
+            if arg.MinValue then
+                option:setMinValue(arg.MinValue)
+            end
+
+            if arg.MaxValue then
+                option:setMaxValue(arg.MaxValue)
+            end
+
+            slashCommand = slashCommand:addOption(option)
+        end
+
+        local success, result = pcall(
+            tam.client.createGlobalApplicationCommand,
+            tam.client,
+            slashCommand
+        )
+
+        if success and result then
+            tam.Comms.registered[name] = true
+        else
+            tam.Comms.failed[name] = {
+                file = modulePath,
+                error = result
+            }
+            print("Failed to register " .. name .. ": " .. tostring(result))
+        end
     end
 
     tam.client:on("slashCommand", function(interaction, command, args)

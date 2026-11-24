@@ -3,8 +3,8 @@ name="Two Turn Tables and a Microphone"
 
 [bot.META]
 major = 0
-minor = 3
-hotfix = 0
+minor = 5
+hotfix = 3
 codename = "Homer Simpson"
 
 [CONF.debug]
