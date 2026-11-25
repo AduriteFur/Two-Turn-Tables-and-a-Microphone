@@ -18,6 +18,7 @@ local fs = require("fs")
 local path = require("path")
 local pretty = require("pretty-print")
 local timer = require("timer")
+local memberUtil = require("src.scripts.utils.memberUtils")
 
 -- functs
 local function scanDir(dir, files)
@@ -161,13 +162,31 @@ function rsComms.init()
     end
 
     tam.client:on("slashCommand", function(interaction, command, args)
+        local member = interaction.member
         local name = (command.Name or command.name):lower()
         local modulePath = tam.Comms.succeeds[name]
 
         if not modulePath then return end
 
         local module = require(modulePath)
-        module.init(interaction, command, args)
+        local permissions = member:getPermissions()
+
+        local convertedPerms = memberUtil:ConvertPermission(tonumber(tostring(permissions):match("%d+")))
+        local neededPerms = memberUtil:ConvertPermission(module.Permission)
+
+        if tam.config.CONF.debug.logging == true then
+            pretty.prettyPrint(permissions)
+            pretty.prettyPrint(neededPerms)
+            pretty.prettyPrint(convertedPerms)
+        end
+
+        local hasPerm = memberUtil:compairTablesForPermission(neededPerms, convertedPerms)
+
+        if hasPerm == true then
+            module.init(interaction, command, args)
+        else
+            interaction:reply("Insufficent Permissions")
+        end
     end)
 end
 
