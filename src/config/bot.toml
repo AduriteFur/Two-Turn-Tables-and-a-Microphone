@@ -1,9 +1,9 @@
 [bot]
-name="Two Turn Tables and a Microphone"
+name = "Two Turn Tables and a Microphone"
 
 [bot.META]
 major = 0
-minor = 5
+minor = 6
 hotfix = 3
 codename = "Homer Simpson [REALLY EARLY DEV]"
 link = "https://github.com/AduriteFur/Two-Turn-Tables-and-a-Microphone"
