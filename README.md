@@ -18,3 +18,6 @@ most importantly press 4 when in the menu  to install all the stuff needed like 
 - Linux Host Machine
 - Lua (5.4 - 5.5)
 - Run the menu.lua file
+
+## NOTES AND COMMENTS
+if you would like to maintain the bot please read MANUAL.md

@@ -9,11 +9,12 @@ codename = "Homer Simpson [REALLY EARLY DEV]"
 link = "https://github.com/AduriteFur/Two-Turn-Tables-and-a-Microphone"
 
 [CONF.debug]
-logging = true
+logging = false
 extrainfo = false
 debugcommands = true
 
 [CONF.bot]
+prefix_enabled = false
 prefixes = ["tttam!", "tam!", "tm!"]
 send_firstwords = true
 firstword = "deal dough"
