@@ -50,14 +50,17 @@ local function setupTables()
             :gsub("%.lua$", "")
 
         local success, required = pcall(require, modulePath)
-        print("loaded:", modulePath)
-        print("success:", success)
-        print("return type:", type(required))
-        print("return output:", tostring(required))
-        print("cache value:", tostring(package.loaded[modulePath]))
 
-        if type(required) == "table" then
-            pretty.prettyPrint(required)
+        if tam.config.CONF.debug.logging == true then
+            print("loaded:", modulePath)
+            print("success:", success)
+            print("return type:", type(required))
+            print("return output:", tostring(required))
+            print("cache value:", tostring(package.loaded[modulePath]))
+
+            if type(required) == "table" then
+                pretty.prettyPrint(required)
+            end
         end
 
         if success and type(required) == "table" then
@@ -89,7 +92,9 @@ function rsComms.init()
 
         if not tam.Comms.succeeds[name] then
             tam.client:deleteGlobalApplicationCommand(id)
-            print("Cleaned up " .. name)
+            if tam.config.CONF.debug.logging == true then
+                print("Cleaned up " .. name)
+            end
         end
     end
 
@@ -138,10 +143,11 @@ function rsComms.init()
             slashCommand
         )
 
-        -- ill remove these soon
-        print("pcall:", success)
-        print("result:", tostring(result))
-        print("error:", tostring(err))
+        if tam.config.CONF.debug.logging == true then
+            print("pcall:", success)
+            print("result:", tostring(result))
+            print("error:", tostring(err))
+        end
 
         if success and result then
             tam.Comms.registered[name] = true
