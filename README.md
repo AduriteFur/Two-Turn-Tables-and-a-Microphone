@@ -1,4 +1,4 @@
-# Two Turn Tables and a Microphone // TTTAM
+# Two Turn Tables and a Microphone // TAM / TTAM
 A discord bot made for a friend group of mine
 This bot is public cuz whatevs
 
