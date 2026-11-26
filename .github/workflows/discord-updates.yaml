@@ -1,0 +1,43 @@
+name: Discord commit announcements
+
+on:
+  push:
+
+permissions:
+  contents: read
+
+jobs:
+  announce:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Announce commit
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          event="$GITHUB_EVENT_PATH"
+
+          sha=$(jq -r '.head_commit.id // empty' "$event")
+          if [ -z "$sha" ]; then
+            echo "No commit to announce."
+            exit 0
+          fi
+
+          branch=$(jq -r '.ref | sub("^refs/heads/"; "")' "$event")
+          message=$(jq -r '.head_commit.message // "No commit message" | .[0:500]' "$event")
+          author=$(jq -r '.head_commit.author.name // "Unknown"' "$event")
+          url=$(jq -r '.head_commit.url // .compare' "$event")
+          short_sha="${sha:0:7}"
+
+          content=$(printf '**TAM has been updated!**\n\n**Branch:** `%s`\n**Commit:** [`%s`](%s)\n**Author:** %s\n**Message:** %s' \
+            "$branch" "$short_sha" "$url" "$author" "$message")
+
+          jq -n \
+            --arg content "$content" \
+            '{content: $content, allowed_mentions: {parse: []}}' \
+            > payload.json
+
+          curl --fail-with-body --silent --show-error \
+            -H "Content-Type: application/json" \
+            --data-binary @payload.json \
+            "$DISCORD_WEBHOOK_URL"
