@@ -12,8 +12,8 @@ RUN apk add --no-cache \
 COPY . .
 
 ENV TTTAM_CONTAINER=1
-ENV LUA_PATH="/root/.luarocks/share/lua/5.1/?.lua;/root/.luarocks/share/lua/5.1/?/init.lua;;"
-ENV LUA_CPATH="/root/.luarocks/lib/lua/5.1/?.so;;"
+ENV LUA_PATH="/app/deps/share/lua/5.1/?.lua;/app/deps/share/lua/5.1/?/init.lua;;"
+ENV LUA_CPATH="/app/deps/lib/lua/5.1/?.so;;"
 
 RUN lua scripts/menu.lua --install
 
