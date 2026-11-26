@@ -16,14 +16,11 @@ function command.init(interaction)
 
     if date.year == 2026 and date.month == 12 and date.day == 17 then
         interaction:reply({
-             content = "",
-             file = "src/assets/media/video/christmas.webm"
-         })
+            content = "",
+            file = "src/assets/media/video/christmas.webm"
+        })
     else
-        interaction:reply({
-             content = "",
-             file = "src/assets/media/video/christmas.webm"
-         })
+        interaction:reply("nope")
     end
 end
 
