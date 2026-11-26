@@ -3,8 +3,8 @@ name = "Two Turn Tables and a Microphone"
 
 [bot.META]
 major = 0
-minor = 6
-hotfix = 3
+minor = 7
+hotfix = 0
 codename = "Homer Simpson [REALLY EARLY DEV]"
 link = "https://github.com/AduriteFur/Two-Turn-Tables-and-a-Microphone"
 
