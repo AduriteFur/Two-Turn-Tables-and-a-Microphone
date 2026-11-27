@@ -17,6 +17,7 @@ local discordia = require("discordia")
 local tinytoml = require("tinytoml")
 local pretty = require("pretty-print")
 local rsComms = require("./process/registerCommands")
+local rsMods = require("./process/registerModules")
 local globalAssign = require("./utils/templates/globalAssign")
 tam.slash = require("discordia-slash").util.tools()
 
@@ -34,6 +35,7 @@ print("Starting up [" ..
 tam.client:on('ready', function()
     print('Logged in as ' .. tam.client.user.username)
     rsComms.init()
+    rsMods.init()
 end)
 
 print("Attempting to log in")

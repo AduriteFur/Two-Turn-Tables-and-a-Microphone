@@ -40,3 +40,73 @@ local function scanDir(dir, files)
 
     return files
 end
+
+local function setupTables()
+    local files = scanDir("src/scripts/bot/autorun")
+
+    for i, v in ipairs(files) do
+        local modulePath = "../bot/autorun/" ..
+            v:gsub("^src/scripts/bot/autorun/", "")
+            :gsub("%.lua$", "")
+
+        local success, required = pcall(require, modulePath)
+
+        if tam.config.CONF.debug.logging == true then
+            print("loaded:", modulePath)
+            print("success:", success)
+            print("return type:", type(required))
+            print("return output:", tostring(required))
+            print("cache value:", tostring(package.loaded[modulePath]))
+
+            if type(required) == "table" then
+                pretty.prettyPrint(required)
+            end
+        end
+
+        if success and type(required) == "table" then
+            assert(type(required.Name) == "string", "Command is missing a valid Name: " .. modulePath)
+            local name = required.Name:lower()
+
+            if required.eventType == "dbg"
+                and tam.config.CONF.debug.debugcommands == false then
+                if required.Enabled == true then
+                    tam.Comms.skipped[name] = modulePath
+                end
+            else
+                if required.Enabled == true then
+                    tam.Comms.succeeds[name] = modulePath
+                else
+                    tam.Comms.skipped[name] = modulePath
+                end
+            end
+        else
+            tam.Comms.failed[v] = {
+                file = v,
+                error = required
+            }
+        end
+    end
+end
+
+-- module functs
+function rsMods.init()
+    setupTables()
+
+    for name, modulePath in pairs(tam.regModules.succeeds) do
+        local success, result = pcall(require, modulePath)
+
+        if success then
+            tam.regModules.registered[name] = true
+        else
+            tam.regModules.failed[name] = {
+                file = modulePath,
+                error = result
+            }
+
+            tam.regModules.succeeds[name] = nil
+            print("failed " .. name .. ": " .. tostring(result))
+        end
+    end
+end
+
+return rsMods
