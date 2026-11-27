@@ -10,7 +10,7 @@ link = "https://github.com/AduriteFur/Two-Turn-Tables-and-a-Microphone"
 
 [CONF.debug]
 logging = false
-extrainfo = false
+extrainfo = false    # not recommended for production
 debugcommands = true
 
 [CONF.bot]
