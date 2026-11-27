@@ -70,7 +70,9 @@ local function setupTables()
 
             if required.CommType == "dbg"
                 and tam.config.CONF.debug.debugcommands == false then
-                tam.Comms.skipped[name] = modulePath
+                if required.Enabled == true then
+                    tam.Comms.skipped[name] = modulePath
+                end
             else
                 if required.Enabled == true then
                     tam.Comms.succeeds[name] = modulePath
