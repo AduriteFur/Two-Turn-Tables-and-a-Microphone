@@ -21,3 +21,4 @@ most importantly press 4 when in the menu  to install all the stuff needed like 
 
 ## NOTES AND COMMENTS
 if you would like to maintain the bot please read MANUAL.md
+also if you wanna help out feel free to make prs and etc
