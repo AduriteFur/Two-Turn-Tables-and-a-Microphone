@@ -67,13 +67,12 @@ local function setupTables()
         if success and type(required) == "table" then
             assert(type(required.Name) == "string", "Command is missing a valid Name: " .. modulePath)
             local name = required.Name:lower()
-            local module = required(modulePath)
 
             if required.CommType == "dbg"
                 and tam.config.CONF.debug.debugcommands == false then
                 tam.Comms.skipped[name] = modulePath
             else
-                if module.Enabled == true then
+                if required.Enabled == true then
                     tam.Comms.succeeds[name] = modulePath
                 else
                     tam.Comms.skipped[name] = modulePath
